@@ -1,0 +1,6 @@
+c:\users\zenbook\documents\visual studio 2015\Projects\lab1_arch_shepeta\lab1_arch_shepeta\bin\Debug\lab1_arch_shepeta.exe.config
+c:\users\zenbook\documents\visual studio 2015\Projects\lab1_arch_shepeta\lab1_arch_shepeta\obj\Debug\lab1_arch_shepeta.csprojResolveAssemblyReference.cache
+c:\users\zenbook\documents\visual studio 2015\Projects\lab1_arch_shepeta\lab1_arch_shepeta\bin\Debug\lab1_arch_shepeta.exe
+c:\users\zenbook\documents\visual studio 2015\Projects\lab1_arch_shepeta\lab1_arch_shepeta\bin\Debug\lab1_arch_shepeta.pdb
+c:\users\zenbook\documents\visual studio 2015\Projects\lab1_arch_shepeta\lab1_arch_shepeta\obj\Debug\lab1_arch_shepeta.exe
+c:\users\zenbook\documents\visual studio 2015\Projects\lab1_arch_shepeta\lab1_arch_shepeta\obj\Debug\lab1_arch_shepeta.pdb
