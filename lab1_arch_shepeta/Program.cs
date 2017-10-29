@@ -9,12 +9,14 @@ namespace lab1_arch_shepeta
 {
     class Program
     { 
-        public void Delete(string s)
+        public void Delete(string s, out int count)
         {
+            count = 0;
             DirectoryInfo dirInf = new DirectoryInfo(s);
             foreach (FileInfo n in dirInf.GetFiles())
             {
                 File.Delete(n.FullName);
+                count++;
             }
             foreach (DirectoryInfo n in dirInf.GetDirectories())
             {
@@ -22,10 +24,13 @@ namespace lab1_arch_shepeta
                 {
                     foreach (DirectoryInfo k in dirInf.GetDirectories())
                     {
-                        Delete(k.FullName);
+                        int tempCount = count;
+                        Delete(k.FullName, out tempCount);
+                        count+=tempCount;
                     }
                 }
                 Directory.Delete(n.FullName);
+                count++;
             }
         }
         public void CreateDefault(string sd, string subd, string NameOfFile, int quantity)
@@ -35,6 +40,7 @@ namespace lab1_arch_shepeta
             string FileFullPath = dirInf.FullName + @"\" + NameOfFile;
             if (!dirInf.Exists)
             {
+                Console.WriteLine("Created new directory : \\" + dirInf.Name);
                 dirInf.Create();
             }
             for(int i = 0; i < quantity; i++)
@@ -51,27 +57,22 @@ namespace lab1_arch_shepeta
                 }
             }           
         }
+
         static void Main(string[] args)
         {
-            Console.WriteLine("lab_1_architechture_shepeta_andrey_pz_16_2");
+            bool flag;
             string dirName = @"tests";
-            string subDirName = @"newtest\1";
-            string s = "";
-            int quant = 1;
+            string subDirName = @"tests\newtest";
+            DirectoryInfo path = new DirectoryInfo(dirName);
+            DirectoryInfo subPath = new DirectoryInfo(subDirName);
             Program p = new Program();
-            do
+            int quant = 1;
+
+            foreach (string s in args)
             {
-                if (s == "")
-                {
-                    Console.WriteLine("What we gonna do?...............\n");
-                    Console.WriteLine("Input \"/?\" to work with programm : ");
-                }
-                else
-                {
-                    Console.WriteLine("Unknown command! Try again");
-                }
-                s = Console.ReadLine();
-                if (s == @"/?")
+                flag = true;
+                if (!flag) Console.WriteLine("lab_1_architechture_shepeta_andrey_pz_16_2");               
+                if (s ==  "/?")
                 {
                     Console.WriteLine("/create - create example files and directories");
                     Console.WriteLine("/findd - find directory");
@@ -83,27 +84,67 @@ namespace lab1_arch_shepeta
                 }
                 else if (s == "/create")
                 {
-                    do
+                    try
                     {
-                        Console.WriteLine("Type a quantity of creating elements (both of them) : ");
-                        quant = Convert.ToInt32(Console.ReadLine());
-                        if (quant >= 1 && quant <= 10)
-                            p.CreateDefault(dirName, subDirName, @"texttext", quant);
-                        else
+                        do
                         {
-                            Console.WriteLine("Quantity must be in range from 1 to 10!");
-                        }
-                    } while (!(quant >= 1 && quant <= 10));
+                            Console.WriteLine("Type a quantity of creating elements (both of them) : ");
+                            quant = Convert.ToInt32(Console.ReadLine());
+                            if (quant >= 1 && quant <= 10) p.CreateDefault(dirName, subDirName, @"texttext", quant);
+                            else Console.WriteLine("Quantity must be in range from 1 to 10!");
+                        } while (!(quant >= 1 && quant <= 10));
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine(e.Message + "\n");
+                    }
                 }
                 else if (s == "/findd")
                 {
-                    Console.WriteLine("Type name of the directory (for example : another_test0)");
-                    string dd = Console.ReadLine();
-                    DirectoryInfo findd = new DirectoryInfo(dirName + "\\" + dd);
-                    Console.WriteLine(findd.FullName);
+                    string findDir = "";
+                    Console.WriteLine("Type name of the directory");
+                    try
+                    {
+                        findDir = Console.ReadLine();
+                        DirectoryInfo fDir = new DirectoryInfo(findDir);
+                        int count = 0;
+                        foreach(DirectoryInfo dir in fDir.GetDirectories())
+                        {
+                            if (dir.Exists)
+                            {
+                                Console.WriteLine(dir.Name);
+                                count++;
+                            }
+                            else Console.WriteLine("This dir hasnt subdirs");
+                        }
+                        Console.WriteLine("Directory {0} has {1} subdirectories", fDir.Name, count);
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine(e.Message + "\n");
+                    }
                 }
-            } while (s != "/exit");           
-            Console.Read();
+                else if (s == "/allf")
+                {
+                    try
+                    {
+                        FileAttributes fAtr = File.GetAttributes(path.FullName);
+                        Console.WriteLine(fAtr);
+                        int count = 0;
+                        Console.WriteLine("All files and directories from \"tests\" successfuly deleted!");
+                        p.Delete(dirName, out count);
+                        Console.WriteLine(@"Quantity of deleted files and directories from \tests\ : {0}", count);
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine(e.Message + "\n");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Unknown command! Try again");
+                }
+            }         
         }
     }
 }

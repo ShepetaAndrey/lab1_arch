@@ -7,8 +7,8 @@
     <ProjectGuid>{94C66E1C-8F8B-495F-A644-F2B709C0DF11}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>lab1_arch_shepeta</RootNamespace>
-    <AssemblyName>lab1_arch_shepeta</AssemblyName>
+    <RootNamespace>DELFLS</RootNamespace>
+    <AssemblyName>DELFLS</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
