@@ -58,8 +58,33 @@ namespace lab1_arch_shepeta
             }           
         }
 
+        public void FindDir(int count, DirectoryInfo dir, out int quantity)
+        {
+            quantity = 0;
+            foreach (DirectoryInfo dirN in dir.GetDirectories())
+            {
+                if (dirN.Exists)
+                {
+                    if(dirN.GetDirectories().Count() != 0 && count > 0)
+                    {
+                        foreach (DirectoryInfo dirNext in dir.GetDirectories())
+                        {
+                            int temp = quantity;
+                            Console.WriteLine(dirNext.Name);
+                            quantity++;
+                            count--;
+                            FindDir(count, dir, out temp);
+                        }
+                        quantity++;
+                    }                                    
+                }
+                else Console.WriteLine("{0} dir hasnt subdirs", dirN.Name);
+            }
+        }
+
         static void Main(string[] args)
         {
+            bool neflag;
             bool flag;
             string dirName = @"tests";
             string subDirName = @"tests\newtest";
@@ -70,10 +95,12 @@ namespace lab1_arch_shepeta
 
             foreach (string s in args)
             {
+                neflag = true;
                 flag = true;
-                if (!flag) Console.WriteLine("lab_1_architechture_shepeta_andrey_pz_16_2");               
+                if (flag && neflag) Console.WriteLine("lab_1_architechture_shepeta_andrey_pz_16_2");        
                 if (s ==  "/?")
                 {
+                    neflag = false;
                     Console.WriteLine("/create - create example files and directories");
                     Console.WriteLine("/findd - find directory");
                     Console.WriteLine("/findf - find file");
@@ -105,19 +132,13 @@ namespace lab1_arch_shepeta
                     Console.WriteLine("Type name of the directory");
                     try
                     {
+                        Int32 quantity = 0;
                         findDir = Console.ReadLine();
+                        Console.WriteLine("Quantity of recursions : ");
+                        Int32 count = Convert.ToInt32(Console.ReadLine());                     
                         DirectoryInfo fDir = new DirectoryInfo(findDir);
-                        int count = 0;
-                        foreach(DirectoryInfo dir in fDir.GetDirectories())
-                        {
-                            if (dir.Exists)
-                            {
-                                Console.WriteLine(dir.Name);
-                                count++;
-                            }
-                            else Console.WriteLine("This dir hasnt subdirs");
-                        }
-                        Console.WriteLine("Directory {0} has {1} subdirectories", fDir.Name, count);
+                        p.FindDir(count, fDir, out quantity);
+                        Console.WriteLine("Directory {0} has {1} subdirectories\nQuantity of recursions : {2}", fDir.Name, quantity, count);
                     }
                     catch(Exception e)
                     {
