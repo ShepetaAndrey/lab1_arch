@@ -1,4 +1,4 @@
 @echo off
 echo TEST 1
-DELFLS /findd
+DELFLS test
 pause

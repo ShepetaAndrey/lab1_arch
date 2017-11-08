@@ -9,9 +9,9 @@ namespace lab1_arch_shepeta
 {
     class Program
     {
-        static int temp;
+        //static int temp;
         /////////////////DELETING TESTS FOLDERS AND FILES/////////////////////
-        public void Delete(string s, out int count)
+        public void DeleteSubj(string s, out int count)
         {
             count = 0;
             DirectoryInfo dirInf = new DirectoryInfo(s);
@@ -22,14 +22,11 @@ namespace lab1_arch_shepeta
             }
             foreach (DirectoryInfo n in dirInf.GetDirectories())
             {
-                if (n.GetDirectories().Count() != 0)
+                foreach (DirectoryInfo k in dirInf.GetDirectories())
                 {
-                    foreach (DirectoryInfo k in dirInf.GetDirectories())
-                    {
-                        int tempCount = count;
-                        Delete(k.FullName, out tempCount);
-                        count+=tempCount;
-                    }
+                    int tempCount = count;
+                    DeleteSubj(k.FullName, out tempCount);
+                    count += tempCount;
                 }
                 Directory.Delete(n.FullName);
                 count++;
@@ -61,21 +58,22 @@ namespace lab1_arch_shepeta
             }           
         }
         //////////////FINDING DIRECTORIES///////////////
-        
-        public void FindDir(DirectoryInfo dir, out int quantity)
+        public string FindDir(string dir, string s)
         {
-            quantity = 0;
-            foreach(DirectoryInfo d in dir.GetDirectories())
+            DirectoryInfo lala = new DirectoryInfo(dir);
+            foreach(DirectoryInfo d in lala.GetDirectories())
             {
-                quantity++;
+                if(d.Name == s)
+                {
+                    return d.FullName;
+                }
+                Console.WriteLine(d.Name);
                 if (d.GetDirectories().Count() != 0)
                 {
-                    temp = 0;
-                    FindDir(d, out temp);
-                    quantity += temp;
-                    temp = 0;
+                    FindDir(d.FullName, s);
                 }
             }
+            return "No matches found";
         }
         
 
@@ -87,19 +85,19 @@ namespace lab1_arch_shepeta
             DirectoryInfo path = new DirectoryInfo(dirName);
             DirectoryInfo subPath = new DirectoryInfo(subDirName);
             Program p = new Program();
-            int quant = 1;
+            int quant = 0;
 
             foreach (string s in args)
             {       
                 if (s ==  "/?")
                 {
-                    Console.WriteLine("/create - create example files and directories");
-                    Console.WriteLine("/findd - find directory");
-                    Console.WriteLine("/findf - find file");
-                    Console.WriteLine("/some - to delete some files from directory");
-                    Console.WriteLine("/all - delete all files from directory");
-                    Console.WriteLine("/allf - delete all files from directory and subdirectories");
-                    Console.WriteLine("/exit - end the programm...");
+                    Console.WriteLine("  /create - create example files and directories");
+                    Console.WriteLine("  /findd - find directory");
+                    Console.WriteLine("  /findf - find file");
+                    Console.WriteLine("  /some - to delete some files from directory");
+                    Console.WriteLine("  /all - delete all files from directory");
+                    Console.WriteLine("  /allf - delete all files from directory and subdirectories");
+                    Console.WriteLine("  /exit - end the programm...");
                 }
                 else if (s == "/create")
                 {
@@ -118,39 +116,57 @@ namespace lab1_arch_shepeta
                         Console.WriteLine(e.Message + "\n");
                     }
                 }
-                else if (s == "/findd")
-                {
-                    try
-                    {
-                        Int32 quantity = 0;
+                //else if (s == "/findd")
+                //{
+                //    try
+                //    {
+                //        Int32 quantity = 0;
 
-                        string findDir = "";
-                        Console.WriteLine("Type name of the directory");    
-                        findDir = Console.ReadLine();        
+                //        string findDir = "";
+                //        Console.WriteLine("Type name of the directory");    
+                //        findDir = Console.ReadLine();        
                                                           
-                        DirectoryInfo fDir = new DirectoryInfo(findDir);
-
-                        p.FindDir(fDir, out quantity);
-                        Console.WriteLine("Directory {0} has {1} subdirectories\nQuantity of recursions : {2}", fDir.Name, quantity);
-                    }
-                    catch(Exception e)
-                    {
-                        Console.WriteLine(e.Message + "\n");
-                    }
-                }
+                //        DirectoryInfo fDir = new DirectoryInfo(findDir);
+                        
+                //        string q = p.FindDir(fDir);
+                //        Console.WriteLine("Directory {0} has {1} subdirectories\n", fDir.Name, q);
+                //    }
+                //    catch(Exception e)
+                //    {
+                //        Console.WriteLine(e);
+                //    }
+                //}
                 else if (s == "/allf")
                 {
                     try
                     {
                         int count = 0;
                         Console.WriteLine("All files and directories from \"tests\" successfuly deleted!");
-                        p.Delete(dirName, out count);
+                        p.DeleteSubj(dirName, out count);
                         Console.WriteLine(@"Quantity of deleted files and directories from \tests\ : {0}", count);
                     }
                     catch(Exception e)
                     {
                         Console.WriteLine(e.Message + "\n");
                     }
+                }
+                else if (s != "/allf" || s != "findd" || s!="/create")
+                {
+                    try
+                    {
+                        string dirNew = @"\let";
+                        string catch_path = "dada";
+                        catch_path = p.FindDir(dirNew, s);
+                        Console.WriteLine("FullName of {0} is {1}", s, catch_path);
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    //else
+                    //{
+                    //    Console.WriteLine("Directory wasnt found!");
+                    //}
                 }
                 else
                 {
