@@ -1,12 +1,12 @@
 @echo off
 echo TEST 1
-DELFLS /?
+DELFLS /? 
 IF %ErrorLevel% == 0 echo TEST IS OK!
 IF NOT %ErrorLevel% == 0 echo TEST IS NOT OK!
 pause
 cls
 echo TEST 2
-DELFLS /findd /allf
+DELFLS /findd 
 IF %ErrorLevel% == 0 echo TEST IS OK!
 IF NOT %ErrorLevel% == 0 echo TEST IS NOT OK!
 pause

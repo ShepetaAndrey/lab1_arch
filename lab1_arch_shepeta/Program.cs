@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 namespace lab1_arch_shepeta
 {
     class Program
-    { 
+    {
+        static int temp;
+        /////////////////DELETING TESTS FOLDERS AND FILES/////////////////////
         public void Delete(string s, out int count)
         {
             count = 0;
@@ -33,6 +35,7 @@ namespace lab1_arch_shepeta
                 count++;
             }
         }
+        //////////////CREATING TEST FOLDERS AND FILES//////////////////////
         public void CreateDefault(string sd, string subd, string NameOfFile, int quantity)
         {
             DirectoryInfo dirInf = new DirectoryInfo(sd);
@@ -57,50 +60,39 @@ namespace lab1_arch_shepeta
                 }
             }           
         }
-
-        public void FindDir(int count, DirectoryInfo dir, out int quantity)
+        //////////////FINDING DIRECTORIES///////////////
+        
+        public void FindDir(DirectoryInfo dir, out int quantity)
         {
             quantity = 0;
-            foreach (DirectoryInfo dirN in dir.GetDirectories())
+            foreach(DirectoryInfo d in dir.GetDirectories())
             {
-                if (dirN.Exists)
+                quantity++;
+                if (d.GetDirectories().Count() != 0)
                 {
-                    if(dirN.GetDirectories().Count() != 0 && count > 0)
-                    {
-                        foreach (DirectoryInfo dirNext in dir.GetDirectories())
-                        {
-                            int temp = quantity;
-                            Console.WriteLine(dirNext.Name);
-                            quantity++;
-                            count--;
-                            FindDir(count, dir, out temp);
-                        }
-                        quantity++;
-                    }                                    
+                    temp = 0;
+                    FindDir(d, out temp);
+                    quantity += temp;
+                    temp = 0;
                 }
-                else Console.WriteLine("{0} dir hasnt subdirs", dirN.Name);
             }
         }
+        
+
 
         static void Main(string[] args)
         {
-            bool neflag;
-            bool flag;
             string dirName = @"tests";
-            string subDirName = @"tests\newtest";
+            string subDirName = @"helloworld\newtest";
             DirectoryInfo path = new DirectoryInfo(dirName);
             DirectoryInfo subPath = new DirectoryInfo(subDirName);
             Program p = new Program();
             int quant = 1;
 
             foreach (string s in args)
-            {
-                neflag = true;
-                flag = true;
-                if (flag && neflag) Console.WriteLine("lab_1_architechture_shepeta_andrey_pz_16_2");        
+            {       
                 if (s ==  "/?")
                 {
-                    neflag = false;
                     Console.WriteLine("/create - create example files and directories");
                     Console.WriteLine("/findd - find directory");
                     Console.WriteLine("/findf - find file");
@@ -117,7 +109,7 @@ namespace lab1_arch_shepeta
                         {
                             Console.WriteLine("Type a quantity of creating elements (both of them) : ");
                             quant = Convert.ToInt32(Console.ReadLine());
-                            if (quant >= 1 && quant <= 10) p.CreateDefault(dirName, subDirName, @"texttext", quant);
+                            if (quant >= 1 && quant <= 10) p.CreateDefault(dirName, subDirName, @"textexample", quant);
                             else Console.WriteLine("Quantity must be in range from 1 to 10!");
                         } while (!(quant >= 1 && quant <= 10));
                     }
@@ -128,17 +120,18 @@ namespace lab1_arch_shepeta
                 }
                 else if (s == "/findd")
                 {
-                    string findDir = "";
-                    Console.WriteLine("Type name of the directory");
                     try
                     {
                         Int32 quantity = 0;
-                        findDir = Console.ReadLine();
-                        Console.WriteLine("Quantity of recursions : ");
-                        Int32 count = Convert.ToInt32(Console.ReadLine());                     
+
+                        string findDir = "";
+                        Console.WriteLine("Type name of the directory");    
+                        findDir = Console.ReadLine();        
+                                                          
                         DirectoryInfo fDir = new DirectoryInfo(findDir);
-                        p.FindDir(count, fDir, out quantity);
-                        Console.WriteLine("Directory {0} has {1} subdirectories\nQuantity of recursions : {2}", fDir.Name, quantity, count);
+
+                        p.FindDir(fDir, out quantity);
+                        Console.WriteLine("Directory {0} has {1} subdirectories\nQuantity of recursions : {2}", fDir.Name, quantity);
                     }
                     catch(Exception e)
                     {
@@ -149,8 +142,6 @@ namespace lab1_arch_shepeta
                 {
                     try
                     {
-                        FileAttributes fAtr = File.GetAttributes(path.FullName);
-                        Console.WriteLine(fAtr);
                         int count = 0;
                         Console.WriteLine("All files and directories from \"tests\" successfuly deleted!");
                         p.Delete(dirName, out count);
