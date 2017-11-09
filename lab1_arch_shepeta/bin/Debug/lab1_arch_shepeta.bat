@@ -12,7 +12,7 @@ IF NOT %ErrorLevel% == 0 echo TEST IS NOT OK!
 pause
 cls
 echo TEST 3
-DELFLS test
+DELFLS NewFolder 
 IF %ErrorLevel% == 0 echo TEST IS OK!
 IF NOT %ErrorLevel% == 0 echo TEST IS NOT OK!
 pause
